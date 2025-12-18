@@ -9,4 +9,22 @@
 <p><strong>Author:</strong> @Model.Author</p>
 <p><strong>Status:</strong> @(Model.IsAvailable ? "Available" : "Not Available")</p>
 
+@if (User.IsInRole("Member"))
+{
+    <form asp-controller="Reservations"
+          asp-action="ReserveBook"
+          method="post"
+          style="margin-top:15px;">
+          
+        <input type="hidden" name="bookId" value="@Model.BookId" />
+
+        <button type="submit"
+                class="btn btn-primary"
+                @(Model.IsAvailable ? "" : "disabled")>
+            Reserve this book
+        </button>
+    </form>
+}
+
+<br />
 <a asp-action="Index">Back to list</a>

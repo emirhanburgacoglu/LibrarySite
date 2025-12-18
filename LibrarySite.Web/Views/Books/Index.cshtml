@@ -5,6 +5,14 @@
 }
 
 <h2>Books</h2>
+@if (TempData["ReservationMessage"] != null)
+{
+    var ok = (bool)TempData["ReservationOk"];
+    <div class="alert @(ok ? "alert-success" : "alert-danger")">
+        @TempData["ReservationMessage"]
+    </div>
+}
+
 
 <table class="table table-striped">
     <thead>
