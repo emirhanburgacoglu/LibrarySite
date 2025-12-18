@@ -28,6 +28,18 @@
                         </li>
                     </ul>
                 </div>
+                @if (User?.Identity?.IsAuthenticated == true)
+{
+    <span style="margin-right:10px;">
+        Hello, @User.Identity.Name
+    </span>
+    <a href="/Auth/Logout">Logout</a>
+}
+else
+{
+    <a href="/Auth/Login">Login</a>
+}
+
             </div>
         </nav>
     </header>

@@ -1,0 +1,27 @@
+@model LibrarySite.Web.ViewModels.LoginViewModel
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+
+    <div>
+        <label>Password</label>
+        <input asp-for="Password" type="password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <div asp-validation-summary="All"></div>
+
+    <button type="submit">Login</button>
+</form>
+
+<p>Demo Accounts:</p>
+<ul>
+    <li>member@uni.edu / 1234</li>
+    <li>admin@uni.edu / 1234</li>
+</ul>
