@@ -1,27 +1,40 @@
 @model LibrarySite.Web.ViewModels.LoginViewModel
 
-<h2>Login</h2>
+@{
+    ViewData["Title"] = "Login";
+}
 
-<form asp-action="Login" method="post">
-    <div>
-        <label>Email</label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title mb-3">Login</h3>
+
+                <form asp-action="Login" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+
+                <hr />
+                <div class="small text-muted">
+                    <div><strong>Demo Accounts</strong></div>
+                    <div>member@uni.edu / 1234</div>
+                    <div>admin@uni.edu / 1234</div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <label>Password</label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-
-    <div asp-validation-summary="All"></div>
-
-    <button type="submit">Login</button>
-</form>
-
-<p>Demo Accounts:</p>
-<ul>
-    <li>member@uni.edu / 1234</li>
-    <li>admin@uni.edu / 1234</li>
-</ul>
+</div>

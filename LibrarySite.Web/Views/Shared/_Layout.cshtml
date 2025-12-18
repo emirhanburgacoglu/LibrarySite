@@ -26,19 +26,31 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+    <a class="nav-link text-dark" asp-controller="Books" asp-action="Index">Books</a>
+</li>
+
                     </ul>
                 </div>
-                @if (User?.Identity?.IsAuthenticated == true)
+              @if (User?.Identity?.IsAuthenticated == true)
 {
     <span style="margin-right:10px;">
         Hello, @User.Identity.Name
     </span>
+
+    @* Sadece Admin ise göster *@
+    @if (User.IsInRole("Admin"))
+    {
+        <a style="margin-right:10px;" href="/Admin/Dashboard">Admin Dashboard</a>
+    }
+
     <a href="/Auth/Logout">Logout</a>
 }
 else
 {
     <a href="/Auth/Login">Login</a>
 }
+
 
             </div>
         </nav>

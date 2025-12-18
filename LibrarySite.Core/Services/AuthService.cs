@@ -9,7 +9,7 @@ namespace LibrarySite.Core.Services
         // Şimdilik demo kullanıcılar. Sonra DB'den gelecek.
         private readonly List<User> _users = new()
         {
-            new User { UserId = 1, Email = "member@uni.edu", Password = "Cemira.1901", Role = UserRole.Member },
+            new User { UserId = 1, Email = "member@uni.edu", Password = "1234", Role = UserRole.Member },
             new User { UserId = 2, Email = "admin@uni.edu",  Password = "1234", Role = UserRole.Admin }
         };
 

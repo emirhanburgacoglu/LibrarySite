@@ -1,0 +1,12 @@
+@model LibrarySite.Core.Domain.Book
+
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<h2>@Model.Title</h2>
+
+<p><strong>Author:</strong> @Model.Author</p>
+<p><strong>Status:</strong> @(Model.IsAvailable ? "Available" : "Not Available")</p>
+
+<a asp-action="Index">Back to list</a>
