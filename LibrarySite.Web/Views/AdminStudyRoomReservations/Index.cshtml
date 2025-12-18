@@ -1,59 +1,185 @@
 @model List<LibrarySite.Core.Domain.StudyRoomReservation>
 
-<h2>Pending Study Room Reservations</h2>
-
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
+@{
+    ViewData["Title"] = "Room Management";
 }
 
-@if (!Model.Any())
-{
-    <div class="alert alert-info">No pending study room reservations.</div>
-}
-else
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ReservationId</th>
-                <th>RoomId</th>
-                <th>MemberUserId</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var r in Model)
-        {
-            <tr>
-                <td>@r.ReservationId</td>
-                <td>@r.StudyRoomId</td>
-                <td>@r.MemberUserId</td>
-                <td>@r.StartTime</td>
-                <td>@r.EndTime</td>
-                <td>@r.Status</td>
-                <td class="d-flex gap-2">
-                    <form asp-action="Approve" method="post">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@r.ReservationId" />
-                        <button class="btn btn-sm btn-success">Approve</button>
-                    </form>
+<style>
+    .admin-header {
+        margin-bottom: 2rem;
+        border-left: 5px solid var(--admin-primary);
+        padding-left: 1rem;
+    }
 
-                    <form asp-action="Cancel" method="post">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="id" value="@r.ReservationId" />
-                        <button class="btn btn-sm btn-danger">Cancel</button>
-                    </form>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    .room-card-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        border: 1px solid #f1f5f9;
+        overflow: hidden;
+    }
+
+    .table thead {
+        background: #f8fafc;
+    }
+
+    .table thead th {
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: #64748b;
+        padding: 1.25rem 1rem;
+        border-bottom: 2px solid #f1f5f9;
+    }
+
+    .table tbody tr {
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+        transition: all 0.2s;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(181, 23, 158, 0.02);
+    }
+
+    .id-tag {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 0.3rem 0.7rem;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.8rem;
+    }
+
+    .room-badge {
+        background: rgba(114, 9, 183, 0.1);
+        color: #7209b7;
+        padding: 0.4rem 0.8rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .time-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f8fafc;
+        padding: 0.5rem 1rem;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+        width: fit-content;
+    }
+
+    .status-pill {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        text-transform: uppercase;
+    }
+
+    .status-pending { background: #fff7ed; color: #c2410c; }
+
+    .btn-admin-action {
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .btn-approve { background: #10b981; color: white; }
+    .btn-approve:hover { background: #059669; transform: translateY(-2px); }
+
+    .btn-cancel { background: #ef4444; color: white; }
+    .btn-cancel:hover { background: #dc2626; transform: translateY(-2px); }
+
+    .empty-box {
+        padding: 5rem;
+        text-align: center;
+        color: #94a3b8;
+    }
+</style>
+
+<div class="admin-header">
+    <h2 class="fw-800 mb-1">Room Management</h2>
+    <p class="text-muted small">Manage and schedule study room bookings.</p>
+</div>
+
+@if (TempData["Success"] != null || TempData["Error"] != null)
+{
+    <div class="alert animate__animated animate__fadeInDown @(TempData["Success"] != null ? "alert-success" : "alert-danger") border-0 shadow-sm rounded-4 mb-4 d-flex align-items-center">
+        <span class="fs-4 me-3">@(TempData["Success"] != null ? "✨" : "⚠️")</span>
+        <span class="fw-600">@(TempData["Success"] ?? TempData["Error"])</span>
+    </div>
 }
+
+<div class="room-card-container shadow-sm">
+    @if (!Model.Any())
+    {
+        <div class="empty-box">
+            <div class="display-1 mb-3">🏢</div>
+            <h4 class="fw-700 text-dark">No Pending Requests</h4>
+            <p>The study room schedule is currently clear.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Room & Member</th>
+                        <th>Schedule</th>
+                        <th>Current Status</th>
+                        <th class="text-end px-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        <tr>
+                            <td class="px-3"><span class="id-tag">#@r.ReservationId</span></td>
+                            <td>
+                                <div class="mb-1"><span class="room-badge">Room @r.StudyRoomId</span></div>
+                                <div class="small fw-600 text-muted">👤 Member @r.MemberUserId</div>
+                            </td>
+                            <td>
+                                <div class="time-pill">
+                                    <span class="text-muted small">🕒</span>
+                                    <span class="fw-bold small text-dark">
+                                        @r.StartTime.ToString("HH:mm") — @r.EndTime.ToString("HH:mm")
+                                    </span>
+                                    <span class="text-muted x-small" style="font-size: 0.7rem;">
+                                        (@r.StartTime.ToString("dd MMM"))
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="status-pill status-pending">@r.Status</span>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2 justify-content-end px-3">
+                                    <form asp-action="Approve" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@r.ReservationId" />
+                                        <button class="btn-admin-action btn-approve shadow-sm">Approve</button>
+                                    </form>
+
+                                    <form asp-action="Cancel" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@r.ReservationId" />
+                                        <button class="btn-admin-action btn-cancel shadow-sm">Cancel</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

@@ -2,7 +2,149 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* Hero Section */
+    .hero-wrapper {
+        padding: 4rem 0;
+        text-align: center;
+        background: radial-gradient(circle at 50% 50%, rgba(67, 97, 238, 0.05) 0%, transparent 70%);
+        margin-bottom: 3rem;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        background: linear-gradient(135deg, #1e293b 0%, #4361ee 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-subtitle {
+        color: #64748b;
+        font-size: 1.25rem;
+        max-width: 700px;
+        margin: 0 auto 2.5rem;
+        line-height: 1.6;
+    }
+
+    /* Feature Cards */
+    .feature-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2.5rem;
+        height: 100%;
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none !important;
+        display: block;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        border-color: var(--member-primary);
+    }
+
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        background: #f8fafc;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        background: var(--member-gradient);
+        color: white;
+        transform: rotate(-5deg);
+    }
+
+    .feature-title {
+        font-weight: 700;
+        font-size: 1.25rem;
+        color: var(--text-main);
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-text {
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .cta-button {
+        background: var(--member-gradient);
+        color: white;
+        padding: 1rem 2.5rem;
+        border-radius: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+        transition: all 0.3s;
+    }
+
+    .cta-button:hover {
+        transform: scale(1.05);
+        color: white;
+        box-shadow: 0 15px 30px rgba(67, 97, 238, 0.3);
+    }
+</style>
+
+<div class="hero-wrapper animate__animated animate__fadeIn">
+    <h1 class="hero-title">Next Generation <br>Library Experience</h1>
+    <p class="hero-subtitle">
+        Welcome to the University Library System. Access over 50,000 digital and physical resources, 
+        book your study spot, and manage your academic journey in one place.
+    </p>
+    <a asp-controller="Books" asp-action="Index" class="cta-button">
+        Explore Collection <span>→</span>
+    </a>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <a asp-controller="Books" asp-action="Index" class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3 class="feature-title">Browse Books</h3>
+            <p class="feature-text">Search our extensive catalog and reserve books instantly from your dashboard.</p>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a asp-controller="StudyRooms" asp-action="Index" class="feature-card">
+            <div class="feature-icon">🏢</div>
+            <h3 class="feature-title">Study Rooms</h3>
+            <p class="feature-text">Need a quiet place? Book our modern study rooms equipped with high-speed internet.</p>
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a asp-controller="Home" asp-action="Index" class="feature-card">
+            <div class="feature-icon">🎓</div>
+            <h3 class="feature-title">Academic Support</h3>
+            <p class="feature-text">Access research guides, citations tools, and academic databases for your projects.</p>
+        </a>
+    </div>
+</div>
+
+<div class="mt-5 p-5 bg-light rounded-4 text-center border">
+    <h4 class="fw-800 mb-3">Ready to start learning?</h4>
+    @if (User.Identity?.IsAuthenticated != true)
+    {
+        <p class="text-muted mb-4">Login with your student credentials to unlock all library features.</p>
+        <a href="/Auth/Login" class="btn btn-outline-primary fw-bold px-5 rounded-pill">Sign In to Your Account</a>
+    }
+    else
+    {
+        <p class="text-muted mb-4">Happy to see you again! Check your active reservations below.</p>
+        <a asp-controller="Reservations" asp-action="MyBookReservations" class="btn btn-outline-dark fw-bold px-5 rounded-pill">View My Dashboard</a>
+    }
 </div>

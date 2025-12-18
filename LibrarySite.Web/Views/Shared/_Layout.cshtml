@@ -1,102 +1,231 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LibrarySite.Web</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - University Library</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/LibrarySite.Web.styles.css" asp-append-version="true" />
+    
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --body-bg: #f8fafc;
+            --text-main: #1e293b;
+            /* Member Colors */
+            --member-primary: #4361ee;
+            --member-gradient: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+            /* Admin Colors */
+            --admin-primary: #b5179e;
+            --admin-gradient: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(at 0% 0%, rgba(67, 97, 238, 0.03) 0px, transparent 50%), 
+                              radial-gradient(at 100% 0%, rgba(247, 37, 133, 0.03) 0px, transparent 50%);
+        }
+
+        /* --- Navbar Tasarımı --- */
+        .navbar {
+            backdrop-filter: blur(15px);
+            background: var(--glass-bg);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e293b 0%, #4361ee 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: #64748b !important;
+            transition: all 0.2s ease;
+            border-radius: 10px;
+        }
+
+        /* --- Ortak Pill (Buton Link) Stili --- */
+        .nav-pill-custom {
+            font-size: 0.85rem;
+            padding: 0.5rem 1.1rem !important;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Member Pill */
+        .member-pill {
+            color: var(--member-primary) !important;
+            background: rgba(67, 97, 238, 0.05);
+            border-color: rgba(67, 97, 238, 0.15);
+        }
+
+        .member-pill:hover {
+            background: var(--member-gradient) !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Admin Pill */
+        .admin-pill {
+            color: var(--admin-primary) !important;
+            background: rgba(181, 23, 158, 0.05);
+            border-color: rgba(181, 23, 158, 0.15);
+        }
+
+        .admin-pill:hover {
+            background: var(--admin-gradient) !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(181, 23, 158, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* --- Ana İçerik --- */
+        .main-container {
+            flex: 1;
+            padding: 2.5rem 0;
+        }
+
+        .page-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            padding: 2.5rem;
+            border: 1px solid rgba(255,255,255,1);
+        }
+
+        /* --- Profil ve Footer --- */
+        .user-badge {
+            background: #f1f5f9;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        footer {
+            background: white;
+            padding: 1.5rem 0;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive düzenlemeler */
+        @@media (max-width: 991.98px) {
+            .navbar-nav { gap: 8px !important; padding: 1rem 0; }
+            .nav-pill-custom { width: fit-content; }
+        }
+    </style>
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LibrarySite.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                  <ul class="navbar-nav flex-grow-1">
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
-    </li>
 
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="Books" asp-action="Index">Books</a>
-    </li>
-
-    @* SADECE MEMBER *@
-    @if (User.IsInRole("Member"))
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark"
-               asp-controller="StudyRooms"
-               asp-action="Index">
-                Study Rooms
-            </a>
-            
-        </li>
-          <li class="nav-item">
-        <a class="nav-link text-dark"
-           asp-controller="Reservations"
-           asp-action="MyBookReservations">
-            My Book Reservations
-        </a>
-    </li>
-    }
-</ul>
-
-                </div>
-              @if (User?.Identity?.IsAuthenticated == true)
-{
-    <span style="margin-right:10px;">
-        Hello, @User.Identity.Name
-    </span>
-
-    @* Sadece Admin ise göster *@
-    @if (User.IsInRole("Admin"))
-    {
-        <a style="margin-right:10px;" href="/Admin/Dashboard">Admin Dashboard</a>
-   <a style="margin-right:10px;" href="/AdminReservations/Index">
-            Manage Reservations
-        </a>
-        <a style="margin-right:10px;" href="/AdminStudyRoomReservations/Index">
-    Manage Study Rooms
-</a>
-    }
-
-    <a href="/Auth/Logout">Logout</a>
-}
-else
-{
-    <a href="/Auth/Login">Login</a>
-}
-
-
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+    <nav class="navbar navbar-expand-lg sticky-top">
         <div class="container">
-            &copy; 2025 - LibrarySite.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                <span class="me-2">📚</span> UNIVERSITY LIBRARY
+            </a>
+
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-2 ms-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link px-3" asp-controller="Books" asp-action="Index">Books</a>
+                    </li>
+
+                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Member"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link nav-pill-custom member-pill" asp-controller="StudyRooms" asp-action="Index">
+                                🏢 Study Rooms
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-pill-custom member-pill" asp-controller="Reservations" asp-action="MyBookReservations">
+                                👤 My Reservations
+                            </a>
+                        </li>
+                    }
+
+                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item ms-lg-3">
+        <a class="nav-link admin-pill px-3" asp-controller="Admin" asp-action="Dashboard">
+            <span class="me-1">📊</span> Dashboard
+        </a>
+    </li>
+                        <li class="nav-item ms-lg-2">
+                            <a class="nav-link nav-pill-custom admin-pill" href="/AdminReservations/Index">
+                                📑 Book Admin
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-pill-custom admin-pill" href="/AdminStudyRoomReservations/Index">
+                                🔑 Room Admin
+                            </a>
+                        </li>
+
+                    }
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="user-badge d-none d-md-block">
+                            @User.Identity.Name
+                        </div>
+                        <a class="btn btn-outline-danger btn-sm rounded-3 px-3 fw-bold" href="/Auth/Logout">Logout</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary btn-sm rounded-3 px-4 shadow-sm fw-bold" 
+                           style="background: var(--member-gradient); border:none;" 
+                           href="/Auth/Login">Login</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container main-container">
+        <div class="page-card animate__animated animate__fadeIn">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer>
+        <div class="container text-center text-md-start">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-muted">
+                    © 2025 <b>University Library System</b>
+                </div>
+                <div class="col-md-6 text-md-end mt-2 mt-md-0">
+                    <span class="badge bg-light text-dark border fw-normal py-2 px-3">Computer Engineering Project</span>
+                </div>
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

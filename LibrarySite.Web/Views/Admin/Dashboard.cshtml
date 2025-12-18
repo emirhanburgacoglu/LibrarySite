@@ -1,2 +1,149 @@
-<h2>Admin Dashboard</h2>
-<p>Only Admin users can see this page.</p>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<style>
+    .dashboard-container {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    .welcome-banner {
+        background: var(--admin-gradient);
+        border-radius: 20px;
+        padding: 3rem;
+        color: white;
+        margin-bottom: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(181, 23, 158, 0.2);
+    }
+
+    .welcome-banner::after {
+        content: '⚙️';
+        position: absolute;
+        right: -20px;
+        bottom: -20px;
+        font-size: 10rem;
+        opacity: 0.1;
+        transform: rotate(-15deg);
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 18px;
+        padding: 1.5rem;
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .quick-action-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 1rem 1.5rem;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        text-decoration: none;
+        color: var(--text-main);
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .quick-action-btn:hover {
+        background: #f8fafc;
+        border-color: var(--admin-primary);
+        color: var(--admin-primary);
+        transform: translateX(5px);
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="dashboard-container">
+    <div class="welcome-banner">
+        <div class="position-relative" style="z-index: 2;">
+            <h1 class="fw-800 mb-2">Welcome back, Admin!</h1>
+            <p class="opacity-75 mb-0 fs-5">You have full control over the University Library System.</p>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="stat-card text-center">
+                <div class="stat-icon mx-auto" style="background: rgba(67, 97, 238, 0.1); color: #4361ee;">
+                    📚
+                </div>
+                <h3 class="fw-800 mb-1">Catalog</h3>
+                <p class="text-muted small">Manage all library books and resources.</p>
+                <a href="/Books/Index" class="btn btn-sm btn-outline-primary rounded-pill px-4">View Books</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card text-center text-md-start">
+                <div class="stat-icon mx-auto mx-md-0" style="background: rgba(247, 37, 133, 0.1); color: #f72585;">
+                    📑
+                </div>
+                <h3 class="fw-800 mb-1">Book Reservations</h3>
+                <p class="text-muted small">Monitor and approve book borrowing requests.</p>
+                <a href="/AdminReservations/Index" class="btn btn-sm btn-primary rounded-pill px-4" style="background: var(--admin-gradient); border:none;">Manage Requests</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card text-center text-md-start">
+                <div class="stat-icon mx-auto mx-md-0" style="background: rgba(114, 9, 183, 0.1); color: #7209b7;">
+                    🔑
+                </div>
+                <h3 class="fw-800 mb-1">Study Rooms</h3>
+                <p class="text-muted small">Control room assignments and scheduling.</p>
+                <a href="/AdminStudyRoomReservations/Index" class="btn btn-sm btn-dark rounded-pill px-4">Room Admin</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h5 class="fw-700 mb-3 px-2">Quick Shortcuts</h5>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <a href="/AdminReservations/Index" class="quick-action-btn">
+                    <span>📋</span>
+                    <div>
+                        <div class="mb-0">Check Pending Approvals</div>
+                        <div class="small text-muted fw-normal">Review user requests for books</div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a href="/AdminStudyRoomReservations/Index" class="quick-action-btn">
+                    <span>🕒</span>
+                    <div>
+                        <div class="mb-0">Daily Room Schedule</div>
+                        <div class="small text-muted fw-normal">See who booked which room today</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

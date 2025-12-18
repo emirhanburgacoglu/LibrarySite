@@ -4,53 +4,182 @@
     ViewData["Title"] = "Pending Reservations";
 }
 
-<h2>Pending Reservations</h2>
+<style>
+    .admin-header {
+        margin-bottom: 2rem;
+        border-left: 5px solid var(--admin-primary);
+        padding-left: 1rem;
+    }
+
+    .reservation-table-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .table thead {
+        background: #fafafa;
+        border-bottom: 2px solid #f1f5f9;
+    }
+
+    .table thead th {
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        padding: 1.25rem 1rem;
+    }
+
+    .table tbody tr {
+        transition: background 0.2s;
+        vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(181, 23, 158, 0.02);
+    }
+
+    .id-badge {
+        background: #f1f5f9;
+        color: #475569;
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
+    .date-text {
+        color: #64748b;
+        font-size: 0.85rem;
+    }
+
+    .action-group {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-action {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.2s;
+    }
+
+    .btn-approve {
+        background: #ecfdf5;
+        color: #059669;
+        border: 1px solid #d1fae5;
+    }
+
+    .btn-approve:hover {
+        background: #059669;
+        color: white;
+    }
+
+    .btn-cancel {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fee2e2;
+    }
+
+    .btn-cancel:hover {
+        background: #dc2626;
+        color: white;
+    }
+
+    .empty-state {
+        padding: 4rem;
+        text-align: center;
+        background: #f8fafc;
+        border-radius: 20px;
+        border: 2px dashed #e2e8f0;
+    }
+</style>
+
+<div class="admin-header">
+    <h2 class="fw-800 mb-1">Pending Reservations</h2>
+    <p class="text-muted small">Review and manage book loan requests from members.</p>
+</div>
 
 @if (TempData["AdminResMessage"] != null)
 {
     var ok = (bool)TempData["AdminResOk"];
-    <div class="alert @(ok ? "alert-success" : "alert-danger")">
-        @TempData["AdminResMessage"]
+    <div class="alert animate__animated animate__fadeInDown @(ok ? "alert-success" : "alert-danger") border-0 shadow-sm rounded-4 mb-4">
+        <div class="d-flex align-items-center">
+            <span class="fs-4 me-3">@(ok ? "🎉" : "⚠️")</span>
+            <span class="fw-600">@TempData["AdminResMessage"]</span>
+        </div>
     </div>
 }
 
 @if (Model.Count == 0)
 {
-    <div class="alert alert-info">No pending reservations.</div>
+    <div class="empty-state">
+        <div class="fs-1 mb-3">☕</div>
+        <h4 class="fw-700 text-dark">All Caught Up!</h4>
+        <p class="text-muted">There are no pending reservations to process right now.</p>
+    </div>
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>ReservationId</th>
-            <th>BookId</th>
-            <th>MemberUserId</th>
-            <th>CreatedAt</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var r in Model)
-        {
-            <tr>
-                <td>@r.ReservationId</td>
-                <td>@r.BookId</td>
-                <td>@r.MemberUserId</td>
-                <td>@r.CreatedAt</td>
-                <td>
-                    <form asp-action="Approve" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@r.ReservationId" />
-                        <button class="btn btn-sm btn-success" type="submit">Approve</button>
-                    </form>
+    <div class="reservation-table-card shadow-sm border">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Book Information</th>
+                        <th>Member Details</th>
+                        <th>Request Date</th>
+                        <th class="text-end">Management Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in Model)
+                    {
+                        <tr>
+                            <td><span class="id-badge">#@r.ReservationId</span></td>
+                            <td>
+                                <div class="fw-700">Book ID: @r.BookId</div>
+                                <div class="small text-muted">Awaiting fulfillment</div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width: 32px; height: 32px; background: #e2e8f0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem;">👤</div>
+                                    <div class="fw-600 fs-7">User @r.MemberUserId</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="date-text">@r.CreatedAt.ToString("dd MMM yyyy")</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">@r.CreatedAt.ToString("HH:mm")</div>
+                            </td>
+                            <td>
+                                <div class="action-group justify-content-end">
+                                    <form asp-action="Approve" method="post">
+                                        <input type="hidden" name="id" value="@r.ReservationId" />
+                                        <button class="btn btn-action btn-approve" type="submit">
+                                            <span>Check</span> Approve
+                                        </button>
+                                    </form>
 
-                    <form asp-action="Cancel" method="post" style="display:inline; margin-left:6px;">
-                        <input type="hidden" name="id" value="@r.ReservationId" />
-                        <button class="btn btn-sm btn-danger" type="submit">Cancel</button>
-                    </form>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+                                    <form asp-action="Cancel" method="post">
+                                        <input type="hidden" name="id" value="@r.ReservationId" />
+                                        <button class="btn btn-action btn-cancel" type="submit">
+                                            <span>✕</span> Cancel
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }

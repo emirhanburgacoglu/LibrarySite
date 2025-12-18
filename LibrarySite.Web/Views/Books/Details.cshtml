@@ -4,27 +4,145 @@
     ViewData["Title"] = "Book Details";
 }
 
-<h2>@Model.Title</h2>
+<style>
+    .details-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
 
-<p><strong>Author:</strong> @Model.Author</p>
-<p><strong>Status:</strong> @(Model.IsAvailable ? "Available" : "Not Available")</p>
+    .book-detail-card {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
 
-@if (User.IsInRole("Member"))
-{
-    <form asp-controller="Reservations"
-          asp-action="ReserveBook"
-          method="post"
-          style="margin-top:15px;">
-          
-        <input type="hidden" name="bookId" value="@Model.BookId" />
+    @@media (min-width: 768px) {
+        .book-detail-card {
+            flex-direction: row;
+            align-items: flex-start;
+        }
+    }
 
-        <button type="submit"
-                class="btn btn-primary"
-                @(Model.IsAvailable ? "" : "disabled")>
-            Reserve this book
-        </button>
-    </form>
-}
+    .book-visual {
+        flex: 0 0 280px;
+        height: 380px;
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 5rem;
+        box-shadow: inset 0 0 40px rgba(0,0,0,0.02);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
 
-<br />
-<a asp-action="Index">Back to list</a>
+    .book-info-section {
+        flex: 1;
+    }
+
+    .detail-label {
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #94a3b8;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-box {
+        background: #f8fafc;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        border: 1px solid #f1f5f9;
+    }
+
+    .back-link {
+        color: #64748b;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .back-link:hover {
+        color: var(--member-primary);
+    }
+
+    .btn-reserve {
+        padding: 1rem 2rem;
+        border-radius: 15px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div class="details-container">
+    <div class="mb-4">
+        <a asp-action="Index" class="back-link">
+            <span>←</span> Back to Collection
+        </a>
+    </div>
+
+    <div class="book-detail-card">
+        <div class="book-visual animate__animated animate__fadeInLeft">
+            <span>📖</span>
+            <div class="mt-2" style="font-size: 1rem; color: #94a3b8; font-weight: 500;">Hardcover Edition</div>
+        </div>
+
+        <div class="book-info-section">
+            <h1 class="fw-800 mb-4" style="font-size: 2.5rem; letter-spacing: -1px;">@Model.Title</h1>
+
+            <div class="info-box">
+                <div class="detail-label">Written By</div>
+                <div class="fw-bold fs-5 text-dark">@Model.Author</div>
+            </div>
+
+            <div class="info-box">
+                <div class="detail-label">Availability Status</div>
+                <div class="d-flex align-items-center gap-2">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: @(Model.IsAvailable ? "#10b981" : "#ef4444");"></div>
+                    <span class="fw-bold" style="color: @(Model.IsAvailable ? "#059669" : "#dc2626");">
+                        @(Model.IsAvailable ? "Available for pickup" : "Currently reserved / On loan")
+                    </span>
+                </div>
+            </div>
+
+            @if (User.IsInRole("Member"))
+            {
+                <form asp-controller="Reservations" asp-action="ReserveBook" method="post" class="mt-4">
+                    <input type="hidden" name="bookId" value="@Model.BookId" />
+
+                    @if (Model.IsAvailable)
+                    {
+                        <button type="submit" class="btn btn-primary btn-reserve w-100 shadow-lg border-0" 
+                                style="background: var(--member-gradient);">
+                            ⚡ Reserve Now
+                        </button>
+                        <p class="text-muted small text-center mt-3">
+                            Clicking reserve will hold this book for you for 24 hours.
+                        </p>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-light btn-reserve w-100 disabled text-muted border">
+                            Not Available for Reservation
+                        </button>
+                    }
+                </form>
+            }
+            else if (!User.Identity.IsAuthenticated)
+            {
+                <div class="alert alert-light border mt-4 text-center rounded-4">
+                    <p class="mb-2 small fw-bold text-muted">Want to reserve this book?</p>
+                    <a href="/Auth/Login" class="btn btn-sm btn-outline-primary px-4 rounded-pill">Login to Reserve</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

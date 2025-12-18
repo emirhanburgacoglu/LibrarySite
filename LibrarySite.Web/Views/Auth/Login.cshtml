@@ -4,37 +4,148 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h3 class="card-title mb-3">Login</h3>
+<style>
+    .login-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 0;
+    }
 
-                <form asp-action="Login" method="post">
-                    <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
+    .login-box {
+        width: 100%;
+        max-width: 420px;
+    }
 
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input asp-for="Password" type="password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
+    .login-header-icon {
+        width: 70px;
+        height: 70px;
+        background: var(--member-gradient);
+        color: white;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 10px 20px rgba(67, 97, 238, 0.15);
+    }
 
-                    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+    .form-label {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #475569;
+        margin-bottom: 0.5rem;
+        margin-left: 4px;
+    }
 
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
-                </form>
+    .custom-input {
+        padding: 0.75rem 1.1rem;
+        border-radius: 12px;
+        border: 1.5px solid #e2e8f0;
+        transition: all 0.2s ease;
+        background-color: #fdfeff;
+    }
 
-                <hr />
-                <div class="small text-muted">
-                    <div><strong>Demo Accounts</strong></div>
-                    <div>member@uni.edu / 1234</div>
-                    <div>admin@uni.edu / 1234</div>
-                </div>
+    .custom-input:focus {
+        border-color: var(--member-primary);
+        box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.08);
+        background-color: #fff;
+    }
+
+    .btn-login-gradient {
+        background: var(--member-gradient);
+        color: white;
+        border: none;
+        padding: 0.8rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    .btn-login-gradient:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(67, 97, 238, 0.2);
+        color: white;
+        opacity: 0.95;
+    }
+
+    .demo-info-card {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 1rem;
+        margin-top: 2rem;
+        border: 1px solid #f1f5f9;
+    }
+
+    .demo-account-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .demo-tag {
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+    }
+</style>
+
+<div class="login-wrapper animate__animated animate__fadeIn">
+    <div class="login-box">
+        <div class="text-center mb-4">
+            <div class="login-header-icon">🔑</div>
+            <h2 class="fw-800 text-dark mb-1">Welcome Back</h2>
+            <p class="text-muted small">Sign in to manage your library activities</p>
+        </div>
+
+        <form asp-action="Login" method="post">
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input asp-for="Email" class="form-control custom-input" placeholder="name@uni.edu" />
+                <span asp-validation-for="Email" class="text-danger small ms-1"></span>
             </div>
+
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control custom-input" placeholder="••••••••" />
+                <span asp-validation-for="Password" class="text-danger small ms-1"></span>
+            </div>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div asp-validation-summary="All" class="alert alert-danger border-0 small rounded-3 mb-3"></div>
+            }
+
+            <button type="submit" class="btn btn-login-gradient w-100 shadow-sm">
+                Sign In
+            </button>
+        </form>
+
+        <div class="demo-info-card">
+            <div class="demo-tag text-muted mb-2">Demo Credentials</div>
+            <div class="demo-account-row">
+                <span style="color: var(--member-primary); font-weight:700;">Member:</span>
+                <code class="text-dark">member@uni.edu / 1234</code>
+            </div>
+            <div class="demo-account-row">
+                <span style="color: var(--admin-primary); font-weight:700;">Admin:</span>
+                <code class="text-dark">admin@uni.edu / 1234</code>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a asp-controller="Home" asp-action="Index" class="text-muted small text-decoration-none">
+                ← Return to Home
+            </a>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

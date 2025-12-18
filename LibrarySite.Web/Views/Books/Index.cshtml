@@ -4,38 +4,144 @@
     ViewData["Title"] = "Books";
 }
 
-<h2>Books</h2>
+<style>
+    .page-header {
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .book-card {
+        background: #ffffff;
+        border-radius: 18px;
+        border: 1px solid #f1f5f9;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .book-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+        border-color: var(--member-primary);
+    }
+
+    .book-cover-placeholder {
+        height: 160px;
+        background: linear-gradient(45deg, #f8fafc, #e2e8f0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .book-content {
+        padding: 1.25rem;
+        flex-grow: 1;
+    }
+
+    .book-title {
+        font-weight: 700;
+        font-size: 1.15rem;
+        color: var(--text-main);
+        margin-bottom: 0.25rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .book-author {
+        color: #64748b;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 10px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-available {
+        background: #ecfdf5;
+        color: #059669;
+    }
+
+    .status-unavailable {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .book-actions {
+        padding: 1rem 1.25rem;
+        background: #fafafa;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .alert-modern {
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        font-weight: 500;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    }
+</style>
+
+<div class="page-header">
+    <div>
+        <h2 class="fw-800 mb-1">📚 Library Collection</h2>
+        <p class="text-muted small mb-0">Explore our vast collection of academic and literary resources.</p>
+    </div>
+</div>
+
 @if (TempData["ReservationMessage"] != null)
 {
     var ok = (bool)TempData["ReservationOk"];
-    <div class="alert @(ok ? "alert-success" : "alert-danger")">
-        @TempData["ReservationMessage"]
+    <div class="alert alert-modern @(ok ? "alert-success" : "alert-danger") animate__animated animate__headShake mb-4">
+        <span class="me-2">@(ok ? "✅" : "❌")</span> @TempData["ReservationMessage"]
     </div>
 }
 
+<div class="book-grid">
+    @foreach (var book in Model)
+    {
+        <div class="book-card">
+            <div class="book-cover-placeholder">
+                📖
+            </div>
+            
+            <div class="book-content">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div class="book-title">@book.Title</div>
+                </div>
+                <div class="book-author">by @book.Author</div>
+                
+                <div class="status-badge @(book.IsAvailable ? "status-available" : "status-unavailable")">
+                    @(book.IsAvailable ? "Available" : "Checked Out")
+                </div>
+            </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var book in Model)
-        {
-            <tr>
-                <td>@book.Title</td>
-                <td>@book.Author</td>
-                <td>
-                    @(book.IsAvailable ? "Available" : "Not Available")
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@book.BookId">Details</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <div class="book-actions">
+                <a asp-action="Details" asp-route-id="@book.BookId" 
+                   class="btn w-100 fw-bold @(book.IsAvailable ? "btn-outline-primary" : "btn-light disabled")" 
+                   style="border-radius: 10px; transition: 0.2s;">
+                    View Details
+                </a>
+            </div>
+        </div>
+    }
+</div>
