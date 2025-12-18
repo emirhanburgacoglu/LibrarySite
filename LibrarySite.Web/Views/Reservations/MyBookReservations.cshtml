@@ -1,0 +1,33 @@
+@using System.Linq
+@model List<LibrarySite.Core.Domain.Reservation>
+
+<h2>My Book Reservations</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You have no book reservations.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ReservationId</th>
+                <th>BookId</th>
+                <th>Status</th>
+                <th>CreatedAt</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.ReservationId</td>
+                <td>@r.BookId</td>
+                <td>@r.Status</td>
+                <td>@r.CreatedAt</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

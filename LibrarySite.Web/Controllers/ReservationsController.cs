@@ -32,5 +32,16 @@ namespace LibrarySite.Web.Controllers
 
             return RedirectToAction("Index", "Books");
         }
+        [Authorize(Roles = "Member")]
+public IActionResult MyBookReservations()
+{
+    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    if (string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out var memberUserId))
+        return RedirectToAction("Login", "Auth");
+
+    var list = _reservationService.GetReservationsByMember(memberUserId);
+    return View(list);
+}
+
     }
 }

@@ -19,18 +19,40 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-    <a class="nav-link text-dark" asp-controller="Books" asp-action="Index">Books</a>
-</li>
+                  <ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
 
-                    </ul>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-controller="Books" asp-action="Index">Books</a>
+    </li>
+
+    @* SADECE MEMBER *@
+    @if (User.IsInRole("Member"))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark"
+               asp-controller="StudyRooms"
+               asp-action="Index">
+                Study Rooms
+            </a>
+            
+        </li>
+          <li class="nav-item">
+        <a class="nav-link text-dark"
+           asp-controller="Reservations"
+           asp-action="MyBookReservations">
+            My Book Reservations
+        </a>
+    </li>
+    }
+</ul>
+
                 </div>
               @if (User?.Identity?.IsAuthenticated == true)
 {
@@ -45,6 +67,9 @@
    <a style="margin-right:10px;" href="/AdminReservations/Index">
             Manage Reservations
         </a>
+        <a style="margin-right:10px;" href="/AdminStudyRoomReservations/Index">
+    Manage Study Rooms
+</a>
     }
 
     <a href="/Auth/Logout">Logout</a>

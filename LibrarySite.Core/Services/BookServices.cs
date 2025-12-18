@@ -9,7 +9,7 @@ namespace LibrarySite.Core.Services
         private readonly List<Book> _books = new()
         {
             new Book { BookId = 1, Title = "Clean Code", Author = "Robert C. Martin", IsAvailable = true },
-            new Book { BookId = 2, Title = "Design Patterns", Author = "GoF", IsAvailable = false },
+            new Book { BookId = 2, Title = "Design Patterns", Author = "GoF", IsAvailable = true },
             new Book { BookId = 3, Title = "Introduction to Algorithms", Author = "CLRS", IsAvailable = true }
         };
 

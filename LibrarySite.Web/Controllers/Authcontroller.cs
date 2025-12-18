@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using LibrarySite.Core.Services;
 using LibrarySite.Web.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -24,6 +26,7 @@ namespace LibrarySite.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -40,17 +43,21 @@ namespace LibrarySite.Web.Controllers
             // Cookie içine claim yazıyoruz: "Bu kullanıcı kim?"
             var claims = new List<Claim>
             {
+                // ✅ UserId burada (standart claim)
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+
                 new Claim(ClaimTypes.Name, user.Email),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
-            
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal
+            );
 
             return RedirectToAction("Index", "Home");
         }

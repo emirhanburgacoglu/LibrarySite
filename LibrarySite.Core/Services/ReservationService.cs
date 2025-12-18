@@ -44,6 +44,13 @@ namespace LibrarySite.Core.Services
                 .OrderByDescending(r => r.CreatedAt)
                 .ToList();
         }
+        public List<Reservation> GetReservationsByMember(int memberUserId)
+{
+    return _reservations
+        .Where(r => r.MemberUserId == memberUserId)
+        .OrderByDescending(r => r.CreatedAt)
+        .ToList();
+}
 
         public (bool ok, string message) ApproveReservation(int reservationId)
         {

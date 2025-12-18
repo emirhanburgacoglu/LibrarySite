@@ -1,0 +1,59 @@
+@model List<LibrarySite.Core.Domain.StudyRoomReservation>
+
+<h2>Pending Study Room Reservations</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No pending study room reservations.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ReservationId</th>
+                <th>RoomId</th>
+                <th>MemberUserId</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.ReservationId</td>
+                <td>@r.StudyRoomId</td>
+                <td>@r.MemberUserId</td>
+                <td>@r.StartTime</td>
+                <td>@r.EndTime</td>
+                <td>@r.Status</td>
+                <td class="d-flex gap-2">
+                    <form asp-action="Approve" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@r.ReservationId" />
+                        <button class="btn btn-sm btn-success">Approve</button>
+                    </form>
+
+                    <form asp-action="Cancel" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@r.ReservationId" />
+                        <button class="btn btn-sm btn-danger">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
