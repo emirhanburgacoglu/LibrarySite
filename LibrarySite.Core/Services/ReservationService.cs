@@ -45,12 +45,18 @@ namespace LibrarySite.Core.Services
                 .ToList();
         }
         public List<Reservation> GetReservationsByMember(int memberUserId)
-{
-    return _reservations
-        .Where(r => r.MemberUserId == memberUserId)
-        .OrderByDescending(r => r.CreatedAt)
-        .ToList();
-}
+        {
+            return _reservations
+                .Where(r => r.MemberUserId == memberUserId)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToList();
+        }
+        public void ResetForTests()
+        {
+            _reservations.Clear();
+            _nextId = 1;
+        }
+
 
         public (bool ok, string message) ApproveReservation(int reservationId)
         {
