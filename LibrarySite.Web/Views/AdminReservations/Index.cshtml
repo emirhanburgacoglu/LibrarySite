@@ -1,0 +1,56 @@
+@model List<LibrarySite.Core.Domain.Reservation>
+
+@{
+    ViewData["Title"] = "Pending Reservations";
+}
+
+<h2>Pending Reservations</h2>
+
+@if (TempData["AdminResMessage"] != null)
+{
+    var ok = (bool)TempData["AdminResOk"];
+    <div class="alert @(ok ? "alert-success" : "alert-danger")">
+        @TempData["AdminResMessage"]
+    </div>
+}
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">No pending reservations.</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ReservationId</th>
+            <th>BookId</th>
+            <th>MemberUserId</th>
+            <th>CreatedAt</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.ReservationId</td>
+                <td>@r.BookId</td>
+                <td>@r.MemberUserId</td>
+                <td>@r.CreatedAt</td>
+                <td>
+                    <form asp-action="Approve" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@r.ReservationId" />
+                        <button class="btn btn-sm btn-success" type="submit">Approve</button>
+                    </form>
+
+                    <form asp-action="Cancel" method="post" style="display:inline; margin-left:6px;">
+                        <input type="hidden" name="id" value="@r.ReservationId" />
+                        <button class="btn btn-sm btn-danger" type="submit">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

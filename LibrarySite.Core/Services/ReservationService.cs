@@ -36,5 +36,38 @@ namespace LibrarySite.Core.Services
         {
             return _reservations.ToList();
         }
+
+          public List<Reservation> GetPendingReservations()
+        {
+            return _reservations
+                .Where(r => r.Status == ReservationStatus.Pending)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToList();
+        }
+
+        public (bool ok, string message) ApproveReservation(int reservationId)
+        {
+            var res = _reservations.FirstOrDefault(r => r.ReservationId == reservationId);
+            if (res == null) return (false, "Reservation not found.");
+
+            if (res.Status != ReservationStatus.Pending)
+                return (false, "Only pending reservations can be approved.");
+
+            res.Status = ReservationStatus.Approved;
+            return (true, "Reservation approved.");
+        }
+
+        public (bool ok, string message) CancelReservationByAdmin(int reservationId)
+        {
+            var res = _reservations.FirstOrDefault(r => r.ReservationId == reservationId);
+            if (res == null) return (false, "Reservation not found.");
+
+            if (res.Status == ReservationStatus.Cancelled)
+                return (false, "Reservation is already cancelled.");
+
+            res.Status = ReservationStatus.Cancelled;
+            return (true, "Reservation cancelled by admin.");
+        }
     }
+
 }
