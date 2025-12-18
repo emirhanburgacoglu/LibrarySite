@@ -12,6 +12,12 @@ namespace LibrarySite.Core.Services
     _loans.Clear();
     _nextId = 1;
 }
+public bool IsBookBorrowed(int bookId)
+{
+    return _loans.Any(l =>
+        l.BookId == bookId &&
+        l.Status == LoanStatus.Borrowed);
+}
 
         // In-memory loan listesi (DB gelince değişecek)
         private static readonly List<Loan> _loans = new();

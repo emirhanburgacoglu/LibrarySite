@@ -17,6 +17,13 @@ namespace LibrarySite.Core.Services
         {
             return _books;
         }
+        public void MarkAsUnavailable(int bookId)
+{
+    var book = _books.FirstOrDefault(b => b.BookId == bookId);
+    if (book != null)
+        book.IsAvailable = false;
+}
+
 
         public Book? GetById(int id)
         {

@@ -8,10 +8,13 @@ namespace LibrarySite.Web.Controllers
     public class BooksController : Controller
     {
         private readonly BookService _bookService;
+        private readonly LoanService _loanService;
 
-        public BooksController()
+        // ✅ DOĞRU CONSTRUCTOR (DI ile)
+        public BooksController(BookService bookService, LoanService loanService)
         {
-            _bookService = new BookService();
+            _bookService = bookService;
+            _loanService = loanService;
         }
 
         public IActionResult Index()
@@ -25,6 +28,12 @@ namespace LibrarySite.Web.Controllers
             var book = _bookService.GetById(id);
             if (book == null)
                 return NotFound();
+
+            // Loan varsa kitap available değil
+            if (_loanService.IsBookBorrowed(book.BookId))
+            {
+                book.IsAvailable = false;
+            }
 
             return View(book);
         }

@@ -20,6 +20,8 @@ builder.Services.AddAuthorization();
 
 // ✅ DI - Servis kayıtları (auth zincirinden ayrı)
 builder.Services.AddSingleton<StudyRoomReservationService>();
+builder.Services.AddSingleton<LoanService>();
+builder.Services.AddSingleton<BookService>();
 
 var app = builder.Build();
 
