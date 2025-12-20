@@ -23,6 +23,12 @@ namespace LibrarySite.Core.Services
     if (book != null)
         book.IsAvailable = false;
 }
+public void MarkAsAvailable(int bookId)
+{
+    var book = _books.FirstOrDefault(b => b.BookId == bookId);
+    if (book != null)
+        book.IsAvailable = true;
+}
 
 
         public Book? GetById(int id)

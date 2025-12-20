@@ -40,5 +40,38 @@ namespace LibrarySite.Web.Controllers
             TempData[ok ? "Success" : "Error"] = message;
             return RedirectToAction("Details", "Books", new { id = bookId });
         }
+        [HttpGet]
+public IActionResult MyLoans()
+{
+    var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    if (string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out var memberUserId))
+        return RedirectToAction("Index", "Books");
+
+    var loans = _loanService.GetLoansByMember(memberUserId);
+    return View(loans);
+}
+[HttpPost]
+[ValidateAntiForgeryToken]
+public IActionResult Return(int loanId)
+{
+    var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+    if (string.IsNullOrWhiteSpace(userIdClaim) || !int.TryParse(userIdClaim, out var memberUserId))
+        return RedirectToAction(nameof(MyLoans));
+
+    var (ok, message) = _loanService.ReturnBook(loanId, memberUserId);
+
+    if (ok)
+    {
+        // Loan’dan bookId’yi bulup tekrar available yapacağız
+        var loan = _loanService.GetAll().FirstOrDefault(l => l.LoanId == loanId);
+        if (loan != null)
+            _bookService.MarkAsAvailable(loan.BookId);
+    }
+
+    TempData[ok ? "Success" : "Error"] = message;
+    return RedirectToAction(nameof(MyLoans));
+}
+
+
     }
 }

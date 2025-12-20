@@ -74,5 +74,13 @@ public (bool ok, string message) ReturnBook(int loanId, int memberUserId)
         {
             return _loans.ToList();
         }
+        public List<Loan> GetLoansByMember(int memberUserId)
+{
+    return _loans
+        .Where(l => l.MemberUserId == memberUserId)
+        .OrderByDescending(l => l.BorrowedAt)
+        .ToList();
+}
+
     }
 }
