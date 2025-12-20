@@ -148,17 +148,17 @@
                     @if (User.Identity?.IsAuthenticated != true)
                     {
                         <li class="nav-item">
-                            <a class="nav-link nav-pill-custom member-pill text-nowrap" href="#">
+                            <a class="nav-link nav-pill-custom member-pill text-nowrap" asp-controller="Home" asp-action="About">
                                 <span>🏢</span> About Us
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav-pill-custom member-pill text-nowrap" href="#">
+                            <a class="nav-link nav-pill-custom member-pill text-nowrap" asp-controller="Home" asp-action="Contact">
                                 <span>📞</span> Contact
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav-pill-custom member-pill text-nowrap" href="#">
+                            <a class="nav-link nav-pill-custom member-pill text-nowrap" asp-controller="Home" asp-action="News">
                                 <span>📢</span> News
                             </a>
                         </li>
