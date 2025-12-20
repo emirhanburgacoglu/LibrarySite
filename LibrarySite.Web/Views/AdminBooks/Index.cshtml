@@ -1,0 +1,54 @@
+@model List<LibrarySite.Core.Domain.Book>
+
+@{
+    ViewData["Title"] = "Book Catalog (Admin)";
+}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h2 class="mb-1">Book Catalog</h2>
+        <div class="text-muted">Admin view (read-only for now)</div>
+    </div>
+
+    <a class="btn btn-primary disabled" href="#">
+        + Add New Book
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr class="text-muted small">
+                <th style="width:90px;">ID</th>
+                <th>Title</th>
+                <th style="width:220px;">Author</th>
+                <th style="width:140px;">Available</th>
+                <th style="width:220px;" class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td class="fw-semibold">#@b.BookId</td>
+                <td class="fw-semibold">@b.Title</td>
+                <td class="text-muted">@b.Author</td>
+                <td>
+                    @if (b.IsAvailable)
+                    {
+                        <span class="badge bg-success-subtle text-success border">Available</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger-subtle text-danger border">Not available</span>
+                    }
+                </td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-secondary disabled" href="#">Edit</a>
+                    <a class="btn btn-sm btn-outline-danger disabled" href="#">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
