@@ -10,7 +10,7 @@
         <div class="text-muted">Admin view (read-only for now)</div>
     </div>
 
-    <a class="btn btn-primary disabled" href="#">
+    <a class="btn btn-primary" asp-action="Create">
         + Add New Book
     </a>
 </div>
@@ -44,7 +44,7 @@
                     }
                 </td>
                 <td class="text-end">
-                    <a class="btn btn-sm btn-outline-secondary disabled" href="#">Edit</a>
+                    <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@b.BookId">Edit</a>
                     <a class="btn btn-sm btn-outline-danger disabled" href="#">Delete</a>
                 </td>
             </tr>

@@ -35,5 +35,54 @@ public void MarkAsAvailable(int bookId)
         {
             return _books.FirstOrDefault(b => b.BookId == id);
         }
+        public (bool ok, string message) AddBook(string title, string author)
+{
+    title = (title ?? "").Trim();
+    author = (author ?? "").Trim();
+
+    if (string.IsNullOrWhiteSpace(title))
+        return (false, "Title is required.");
+
+    if (string.IsNullOrWhiteSpace(author))
+        return (false, "Author is required.");
+
+    // Eğer _books static list ise, id üretimi için max+1 yapıyoruz
+    var newId = _books.Any() ? _books.Max(b => b.BookId) + 1 : 1;
+
+    _books.Add(new Book
+    {
+        BookId = newId,
+        Title = title,
+        Author = author,
+        IsAvailable = true
+    });
+
+    return (true, "Book added successfully.");
+}
+
+public (bool ok, string message) UpdateBook(int bookId, string title, string author, bool isAvailable)
+{
+    title = (title ?? "").Trim();
+    author = (author ?? "").Trim();
+
+    if (string.IsNullOrWhiteSpace(title))
+        return (false, "Title is required.");
+
+    if (string.IsNullOrWhiteSpace(author))
+        return (false, "Author is required.");
+
+    var book = _books.FirstOrDefault(b => b.BookId == bookId);
+    if (book == null)
+        return (false, "Book not found.");
+
+    book.Title = title;
+    book.Author = author;
+    book.IsAvailable = isAvailable;
+
+    return (true, "Book updated successfully.");
+}
+
+
+
     }
 }
