@@ -22,6 +22,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddSingleton<StudyRoomReservationService>();
 builder.Services.AddSingleton<LoanService>();
 builder.Services.AddSingleton<BookService>();
+builder.Services.AddSingleton<ReservationService>();
 
 var app = builder.Build();
 

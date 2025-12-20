@@ -81,6 +81,16 @@ public (bool ok, string message) UpdateBook(int bookId, string title, string aut
 
     return (true, "Book updated successfully.");
 }
+public (bool ok, string message) DeleteBook(int bookId)
+{
+    var book = _books.FirstOrDefault(b => b.BookId == bookId);
+    if (book == null)
+        return (false, "Book not found.");
+
+    _books.Remove(book);
+    return (true, "Book deleted successfully.");
+}
+
 
 
 

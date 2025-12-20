@@ -4,6 +4,8 @@
     ViewData["Title"] = "Book Catalog (Admin)";
 }
 
+
+
 <div class="d-flex align-items-center justify-content-between mb-4">
     <div>
         <h2 class="mb-1">Book Catalog</h2>
@@ -45,7 +47,8 @@
                 </td>
                 <td class="text-end">
                     <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@b.BookId">Edit</a>
-                    <a class="btn btn-sm btn-outline-danger disabled" href="#">Delete</a>
+                    <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@b.BookId">Delete</a>
+
                 </td>
             </tr>
         }
