@@ -12,7 +12,7 @@ namespace LibrarySite.Core.Domain
 
         public string Email { get; set; } = string.Empty;
 
-        // Şimdilik basit tutuyoruz. DB gelince hash'e geçeceğiz.
+        
         public string Password { get; set; } = string.Empty;
 
         public UserRole Role { get; set; }

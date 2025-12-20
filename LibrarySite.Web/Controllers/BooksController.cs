@@ -16,13 +16,13 @@ namespace LibrarySite.Web.Controllers
             _bookService = bookService;
             _loanService = loanService;
         }
-
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var books = _bookService.GetAll();
             return View(books);
         }
-
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
             var book = _bookService.GetById(id);
